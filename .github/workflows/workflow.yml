@@ -1,0 +1,20 @@
+name: Workflos for unit test & misra
+
+on:
+  push:
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install depdendencies
+        run: sudo apt-get install -y cppcheck
+      - name: Compile
+        run: make clean && make && make cppcheck && make misra
+      - name: Run tests
+        run: build/memPool                      
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4-beta
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
